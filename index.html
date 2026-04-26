@@ -5,456 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Präpositionen Trainer</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      min-height: 100vh;
-      background: #e8e8e8;
-      font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .phone {
-      width: 320px;
-      background: #efefef;
-      border-radius: 36px;
-      padding: 32px 24px 28px;
-      box-shadow: 12px 12px 28px #c8c8c8, -8px -8px 20px #ffffff;
-      min-height: 580px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .notch {
-      width: 80px;
-      height: 6px;
-      background: #d8d8d8;
-      border-radius: 3px;
-      margin: 0 auto 28px;
-      box-shadow: inset 1px 1px 3px #c0c0c0, inset -1px -1px 2px #ffffff;
-    }
-
-    .header {
-      margin-bottom: 22px;
-    }
-
-    .title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #2a2a2a;
-      letter-spacing: -0.02em;
-    }
-
-    .progress-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 4px;
-    }
-
-    .progress-bar-wrap {
-      flex: 1;
-      height: 6px;
-      background: #e0e0e0;
-      border-radius: 3px;
-      box-shadow: inset 2px 2px 4px #c8c8c8, inset -1px -1px 2px #ffffff;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      border-radius: 3px;
-      background: #6a9bf4;
-      transition: width 0.4s ease;
-      width: 0%;
-    }
-
-    .progress-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: #aaa;
-      white-space: nowrap;
-      letter-spacing: 0.04em;
-    }
-
-    .score-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 22px;
-    }
-
-    .chip {
-      background: #efefef;
-      border-radius: 12px;
-      padding: 6px 14px;
-      box-shadow: 4px 4px 8px #d0d0d0, -3px -3px 7px #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #888;
-    }
-
-    .chip-num {
-      font-size: 1rem;
-      font-weight: 800;
-    }
-
-    .chip-num.green {
-      color: #5ab870;
-    }
-
-    .chip-num.red {
-      color: #e07070;
-    }
-
-    .q-card {
-      background: #efefef;
-      border-radius: 20px;
-      padding: 20px 18px;
-      margin-bottom: 16px;
-      box-shadow: 6px 6px 14px #d0d0d0, -4px -4px 10px #ffffff;
-      flex: 1;
-      min-height: 100px;
-    }
-
-    .q-label {
-      font-size: 0.62rem;
-      font-weight: 700;
-      color: #bbb;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
-    }
-
-    .verb-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-      transition: opacity 0.2s ease, max-height 0.2s ease;
-      overflow: hidden;
-      max-height: 60px;
-    }
-
-    .verb-row.hidden {
-      opacity: 0;
-      max-height: 0;
-      margin-bottom: 0;
-    }
-
-    .verb-tag {
-      background: #e6eeff;
-      color: #4a7ad4;
-      font-size: 0.78rem;
-      font-weight: 700;
-      border-radius: 8px;
-      padding: 4px 10px;
-      box-shadow: 2px 2px 5px #d0d0d0, -1px -1px 3px #ffffff;
-    }
-
-    .verb-translation {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #aaa;
-      font-style: italic;
-    }
-
-    .sentence {
-      font-size: 1.05rem;
-      color: #2a2a2a;
-      line-height: 1.65;
-      font-weight: 500;
-    }
-
-    .blank {
-      display: inline-block;
-      min-width: 52px;
-      border-bottom: 2px solid #6a9bf4;
-      text-align: center;
-      color: #6a9bf4;
-      font-weight: 800;
-    }
-
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .opt-btn {
-      background: #efefef;
-      border: none;
-      border-radius: 14px;
-      padding: 13px 18px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #444;
-      cursor: pointer;
-      box-shadow: 5px 5px 10px #d0d0d0, -3px -3px 8px #ffffff;
-      transition: all 0.15s ease;
-      outline: none;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .opt-btn .opt-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: #e4e4e4;
-      box-shadow: 2px 2px 5px #c8c8c8, -2px -2px 4px #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 800;
-      color: #aaa;
-      flex-shrink: 0;
-    }
-
-    .opt-btn:hover:not(:disabled) {
-      box-shadow: 3px 3px 7px #d0d0d0, -2px -2px 5px #ffffff;
-      color: #6a9bf4;
-    }
-
-    .opt-btn:hover:not(:disabled) .opt-icon {
-      color: #6a9bf4;
-    }
-
-    .opt-btn:active:not(:disabled) {
-      box-shadow: inset 3px 3px 7px #d0d0d0, inset -2px -2px 5px #ffffff;
-    }
-
-    .opt-btn.correct {
-      background: #eef7f0;
-      color: #4a9e60;
-    }
-
-    .opt-btn.correct .opt-icon {
-      background: #5ab870;
-      color: #fff;
-      box-shadow: 2px 2px 5px #4a9a58;
-    }
-
-    .opt-btn.wrong {
-      background: #fdf0f0;
-      color: #c05858;
-    }
-
-    .opt-btn.wrong .opt-icon {
-      background: #e07070;
-      color: #fff;
-      box-shadow: 2px 2px 5px #c86060;
-    }
-
-    .feedback {
-      display: none;
-      background: #efefef;
-      border-radius: 14px;
-      padding: 11px 16px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #666;
-      box-shadow: inset 3px 3px 7px #d8d8d8, inset -2px -2px 5px #ffffff;
-      line-height: 1.5;
-      margin-bottom: 12px;
-    }
-
-    .feedback.show {
-      display: block;
-    }
-
-    .case-tag {
-      display: inline-block;
-      font-size: 0.62rem;
-      font-weight: 800;
-      border-radius: 6px;
-      padding: 1px 7px;
-      margin-left: 5px;
-      vertical-align: middle;
-    }
-
-    .akkusativ-tag {
-      background: #ddeaff;
-      color: #4a7ad4;
-    }
-
-    .dativ-tag {
-      background: #ddf0e8;
-      color: #3a8a58;
-    }
-
-    .next-btn {
-      display: none;
-      width: 100%;
-      background: #efefef;
-      border: none;
-      border-radius: 14px;
-      padding: 13px;
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: #6a9bf4;
-      cursor: pointer;
-      letter-spacing: 0.05em;
-      box-shadow: 5px 5px 10px #d0d0d0, -3px -3px 8px #ffffff;
-      transition: all 0.15s ease;
-      outline: none;
-    }
-
-    .next-btn:hover {
-      box-shadow: 3px 3px 7px #d0d0d0, -2px -2px 5px #ffffff;
-    }
-
-    .next-btn:active {
-      box-shadow: inset 3px 3px 7px #d0d0d0, inset -2px -2px 5px #ffffff;
-    }
-
-    .next-btn.show {
-      display: block;
-    }
-
-    .results {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      text-align: center;
-      gap: 12px;
-    }
-
-    .results.show {
-      display: flex;
-    }
-
-    .results-icon {
-      font-size: 3.2rem;
-    }
-
-    .results-score {
-      font-size: 3rem;
-      font-weight: 900;
-      color: #2a2a2a;
-      letter-spacing: -0.03em;
-    }
-
-    .results-sub {
-      font-size: 0.8rem;
-      color: #aaa;
-      font-weight: 600;
-    }
-
-    .results-msg {
-      font-size: 0.85rem;
-      color: #666;
-      max-width: 220px;
-      line-height: 1.5;
-    }
-
-    .restart-btn {
-      background: #efefef;
-      border: none;
-      border-radius: 50px;
-      padding: 14px 36px;
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: #6a9bf4;
-      cursor: pointer;
-      box-shadow: 5px 5px 12px #d0d0d0, -4px -4px 10px #ffffff;
-      outline: none;
-      transition: all 0.15s ease;
-      margin-top: 8px;
-    }
-
-    .restart-btn:hover {
-      box-shadow: 3px 3px 8px #d0d0d0, -2px -2px 6px #ffffff;
-    }
-
-    .restart-btn:active {
-      box-shadow: inset 3px 3px 7px #d0d0d0, inset -2px -2px 5px #ffffff;
-    }
-
-    .lang-toggle {
-      display: flex;
-      background: #e6e6e6;
-      border-radius: 10px;
-      padding: 3px;
-      box-shadow: inset 2px 2px 5px #d0d0d0, inset -1px -1px 3px #ffffff;
-      gap: 2px;
-    }
-
-    .lang-btn {
-      background: transparent;
-      border: none;
-      border-radius: 8px;
-      padding: 5px 10px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      color: #aaa;
-      cursor: pointer;
-      outline: none;
-      transition: all 0.15s ease;
-      letter-spacing: 0.05em;
-    }
-
-    .lang-btn.active {
-      background: #efefef;
-      color: #6a9bf4;
-      box-shadow: 2px 2px 5px #d0d0d0, -1px -1px 3px #ffffff;
-    }
-
-    .hint-toggle {
-      background: #efefef;
-      border: none;
-      border-radius: 10px;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      cursor: pointer;
-      box-shadow: 3px 3px 7px #d0d0d0, -2px -2px 5px #ffffff;
-      outline: none;
-      transition: all 0.15s ease;
-      flex-shrink: 0;
-    }
-
-    .hint-toggle.off {
-      box-shadow: inset 2px 2px 5px #d0d0d0, inset -1px -1px 3px #ffffff;
-      opacity: 0.5;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .fade {
-      animation: fadeUp 0.3s ease;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -471,6 +22,7 @@
           <div class="lang-toggle">
             <button class="lang-btn active" id="btn-ua" onclick="setLang('ua')">UA</button>
             <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" id="btn-hu" onclick="setLang('hu')">HU</button>
           </div>
         </div>
       </div>
@@ -478,7 +30,7 @@
         <div class="progress-bar-wrap">
           <div class="progress-bar-fill" id="progress-fill"></div>
         </div>
-        <div class="progress-label" id="progress-label">0 / 70</div>
+        <div class="progress-label" id="progress-label">0 / 116</div>
       </div>
     </div>
 
@@ -494,12 +46,10 @@
     </div>
 
     <div class="options" id="options-grid"></div>
-    <div class="feedback" id="feedback"></div>
-    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Weiter ›</button>
 
     <div class="results" id="results">
       <div class="results-icon" id="results-icon">🏆</div>
-      <div class="results-score" id="results-score">0/70</div>
+      <div class="results-score" id="results-score">0/116</div>
       <div class="results-sub">Ergebnis</div>
       <div class="results-msg" id="results-msg"></div>
       <button class="restart-btn" onclick="restartQuiz()">Nochmal spielen ↺</button>
@@ -537,8 +87,10 @@
       document.getElementById('progress-fill').style.width = `${(current / total) * 100}%`;
       document.getElementById('sentence-text').innerHTML = q.sentence.replace('___', '<span class="blank">___</span>');
       const verbRow = document.getElementById('verb-row');
-      verbRow.innerHTML = `<span class="verb-tag">${q.verb}</span><span class="verb-translation">${currentLang === 'ua' ? q.translation : q.translationEn}</span>`;
+      const transl = currentLang === 'ua' ? q.translation : currentLang === 'hu' ? q.translationHu : q.translationEn;
+      verbRow.innerHTML = `<span class="verb-tag">${q.verb}</span><span class="verb-translation">${transl}</span>`;
       if (!hintVisible) verbRow.classList.add('hidden');
+
       const grid = document.getElementById('options-grid');
       grid.innerHTML = '';
       const letters = ['A', 'B', 'C', 'D'];
@@ -549,27 +101,17 @@
         btn.onclick = () => checkAnswer(opt, btn, q);
         grid.appendChild(btn);
       });
-      document.getElementById('feedback').className = 'feedback';
-      document.getElementById('feedback').innerHTML = '';
-      document.getElementById('next-btn').classList.remove('show');
     }
 
     function checkAnswer(chosen, btn, q) {
       if (answered) return;
       answered = true;
       document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
-      const fb = document.getElementById('feedback');
-      const sentence = q.sentence.replace('___', `<strong>${q.answer}</strong>`);
-      const caseTag = q.case.includes('Akkusativ')
-        ? `<span class="case-tag akkusativ-tag">Akkusativ</span>`
-        : `<span class="case-tag dativ-tag">Dativ</span>`;
       if (chosen === q.answer) {
         btn.classList.add('correct');
         btn.querySelector('.opt-icon').textContent = '✓';
         correct++;
         document.getElementById('correct-count').textContent = correct;
-        fb.className = 'feedback show';
-        fb.innerHTML = `✅ Richtig! ${caseTag}<br><small>${sentence}</small>`;
       } else {
         btn.classList.add('wrong');
         btn.querySelector('.opt-icon').textContent = '✗';
@@ -581,11 +123,8 @@
             b.querySelector('.opt-icon').textContent = '✓';
           }
         });
-        fb.className = 'feedback show';
-        fb.innerHTML = `❌ Falsch! Richtig: <strong>${q.answer}</strong> ${caseTag}<br><small>${sentence}</small>`;
       }
-      document.getElementById('sentence-text').innerHTML = sentence;
-      document.getElementById('next-btn').classList.add('show');
+      setTimeout(nextQuestion, 3000);
     }
 
     function nextQuestion() {
@@ -597,8 +136,6 @@
     function showResults() {
       document.getElementById('quiz-card').style.display = 'none';
       document.getElementById('options-grid').style.display = 'none';
-      document.getElementById('feedback').className = 'feedback';
-      document.getElementById('next-btn').classList.remove('show');
       document.querySelector('.score-row').style.display = 'none';
       document.getElementById('main-header').style.display = 'none';
       const total = shuffledQ.length;
@@ -624,10 +161,12 @@
       currentLang = lang;
       document.getElementById('btn-ua').classList.toggle('active', lang === 'ua');
       document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.getElementById('btn-hu').classList.toggle('active', lang === 'hu');
       if (shuffledQ.length && current < shuffledQ.length) {
         const q = shuffledQ[current];
         const vr = document.getElementById('verb-row');
-        if (vr) vr.innerHTML = `<span class="verb-tag">${q.verb}</span><span class="verb-translation">${currentLang === 'ua' ? q.translation : q.translationEn}</span>`;
+        const t = currentLang === 'ua' ? q.translation : currentLang === 'hu' ? q.translationHu : q.translationEn;
+        if (vr) vr.innerHTML = `<span class="verb-tag">${q.verb}</span><span class="verb-translation">${t}</span>`;
       }
     }
 
