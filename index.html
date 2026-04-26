@@ -13,10 +13,10 @@
     <div class="notch"></div>
 
     <div class="header" id="main-header">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
         <div class="title">Präpositionen</div>
         <div style="display:flex;align-items:center;gap:8px;">
-          <button class="hint-toggle" id="hint-toggle" onclick="toggleHint()" title="Підказку показати/сховати">
+          <button class="hint-toggle" id="hint-toggle" onclick="toggleHint()">
             <span id="hint-icon">👁</span>
           </button>
           <div class="lang-toggle">
@@ -30,7 +30,7 @@
         <div class="progress-bar-wrap">
           <div class="progress-bar-fill" id="progress-fill"></div>
         </div>
-        <div class="progress-label" id="progress-label">0 / 116</div>
+        <div class="progress-label" id="progress-label">1 / 116</div>
       </div>
     </div>
 
@@ -54,6 +54,15 @@
       <div class="results-msg" id="results-msg"></div>
       <button class="restart-btn" onclick="restartQuiz()">Nochmal spielen ↺</button>
     </div>
+
+    <div class="log-section">
+      <div class="log-header">
+        <span class="log-title">Verlauf</span>
+        <button class="log-clear" onclick="clearLog()">✕ löschen</button>
+      </div>
+      <div class="log-list" id="log-list"></div>
+    </div>
+
   </div>
 
   <script src="questions.js"></script>
@@ -61,8 +70,7 @@
     function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
     let shuffledQ = [], current = 0, correct = 0, wrong = 0, answered = false;
-    let currentLang = 'ua';
-    let hintVisible = true;
+    let currentLang = 'ua', hintVisible = true;
 
     function init() {
       shuffledQ = shuffle(questions);
@@ -89,8 +97,7 @@
       const verbRow = document.getElementById('verb-row');
       const transl = currentLang === 'ua' ? q.translation : currentLang === 'hu' ? q.translationHu : q.translationEn;
       verbRow.innerHTML = `<span class="verb-tag">${q.verb}</span><span class="verb-translation">${transl}</span>`;
-      if (!hintVisible) verbRow.classList.add('hidden');
-
+      verbRow.classList.toggle('hidden', !hintVisible);
       const grid = document.getElementById('options-grid');
       grid.innerHTML = '';
       const letters = ['A', 'B', 'C', 'D'];
@@ -107,7 +114,8 @@
       if (answered) return;
       answered = true;
       document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
-      if (chosen === q.answer) {
+      const isCorrect = chosen === q.answer;
+      if (isCorrect) {
         btn.classList.add('correct');
         btn.querySelector('.opt-icon').textContent = '✓';
         correct++;
@@ -124,8 +132,32 @@
           }
         });
       }
+      addLogEntry(isCorrect, q, chosen);
       setTimeout(nextQuestion, 3000);
     }
+
+    function addLogEntry(isCorrect, q, chosen) {
+      const list = document.getElementById('log-list');
+      const filled = q.sentence.replace('___', `<strong class="${isCorrect ? 'log-correct-word' : 'log-wrong-word'}">${q.answer}</strong>`);
+      const wrongPart = !isCorrect ? ` <span class="log-chosen">← обрав: <em>${chosen}</em></span>` : '';
+      const caseTag = q.case.includes('Akkusativ')
+        ? '<span class="log-case-tag akk">Akk</span>'
+        : '<span class="log-case-tag dat">Dat</span>';
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${isCorrect ? 'log-ok' : 'log-err'} log-new`;
+      entry.innerHTML = `
+    <div class="log-entry-top">
+      <span class="log-icon">${isCorrect ? '✅' : '❌'}</span>
+      <span class="log-verb">${q.verb}</span>
+      ${caseTag}
+    </div>
+    <div class="log-sentence">${filled}${wrongPart}</div>
+  `;
+      list.insertBefore(entry, list.firstChild);
+      setTimeout(() => entry.classList.remove('log-new'), 300);
+    }
+
+    function clearLog() { document.getElementById('log-list').innerHTML = ''; }
 
     function nextQuestion() {
       current++;
@@ -154,14 +186,13 @@
     function restartQuiz() {
       document.querySelector('.score-row').style.display = '';
       document.getElementById('main-header').style.display = '';
+      clearLog();
       init();
     }
 
     function setLang(lang) {
       currentLang = lang;
-      document.getElementById('btn-ua').classList.toggle('active', lang === 'ua');
-      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-      document.getElementById('btn-hu').classList.toggle('active', lang === 'hu');
+      ['ua', 'en', 'hu'].forEach(l => document.getElementById(`btn-${l}`).classList.toggle('active', l === lang));
       if (shuffledQ.length && current < shuffledQ.length) {
         const q = shuffledQ[current];
         const vr = document.getElementById('verb-row');
@@ -172,12 +203,9 @@
 
     function toggleHint() {
       hintVisible = !hintVisible;
-      const vr = document.getElementById('verb-row');
-      const btn = document.getElementById('hint-toggle');
-      const icon = document.getElementById('hint-icon');
-      vr.classList.toggle('hidden', !hintVisible);
-      btn.classList.toggle('off', !hintVisible);
-      icon.textContent = hintVisible ? '👁' : '🙈';
+      document.getElementById('verb-row').classList.toggle('hidden', !hintVisible);
+      document.getElementById('hint-toggle').classList.toggle('off', !hintVisible);
+      document.getElementById('hint-icon').textContent = hintVisible ? '👁' : '🙈';
     }
 
     init();
